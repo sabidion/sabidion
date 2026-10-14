@@ -9,6 +9,7 @@ const $ = (s, el = document) => el.querySelector(s);
 const $$ = (s, el = document) => [...el.querySelectorAll(s)];
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const usd = n => (n ?? 0).toFixed(2) + ' USD';
+const API = (window.MEETION_API || '').replace(/\/$/, '');
 const guardar = (k, v) => { try { localStorage.setItem('meetion-' + k, JSON.stringify(v)); } catch {} };
 const leer = (k, d) => { try { const v = localStorage.getItem('meetion-' + k); return v ? JSON.parse(v) : d; } catch { return d; } };
 
@@ -463,7 +464,35 @@ document.addEventListener('click', e => { if (e.target.closest('[data-cerrar]'))
 const aviso = html => { const t = $('#toast'); t.innerHTML = html; t.classList.add('on'); clearTimeout(t._t); t._t = setTimeout(() => t.classList.remove('on'), 2300); };
 
 $('#btn-carrito').addEventListener('click', () => abrir('#cajon'));
-$('#btn-pagar').addEventListener('click', () => { if (!carrito.length) return aviso('Tu carrito está vacío'); cerrarTodo(); abrir('#modal-pago'); });
+/* Con API configurada, el servidor recalcula los precios y devuelve la URL de pago. Sin API, se muestra la demo. */
+let cuponAplicado = null;
+const itemsPedido = () => carrito.map(l => ({ id: Number(l.id), cant: l.cant }));
+const llamarApi = async (ruta, cuerpo) => {
+  const r = await fetch(API + ruta, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(cuerpo) });
+  const d = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(d.error || 'No se pudo completar la operación.');
+  return d;
+};
+if (API) $('#caja-cupon').hidden = false;
+$('#btn-cupon').addEventListener('click', async () => {
+  const codigo = $('#input-cupon').value.trim();
+  if (!codigo || !carrito.length) return;
+  try {
+    const c = await llamarApi('/api/cotizar', { items: itemsPedido(), cupon: codigo });
+    cuponAplicado = c.cupon; $('#total').textContent = usd(c.total / 100);
+    aviso(`<b>✔</b> Cupón ${esc(c.cupon)} aplicado`);
+  } catch (e) { cuponAplicado = null; pintarCarrito(); aviso(esc(e.message)); }
+});
+$('#btn-pagar').addEventListener('click', async () => {
+  if (!carrito.length) return aviso('Tu carrito está vacío');
+  if (!API) { cerrarTodo(); return abrir('#modal-pago'); }
+  if (!sesion) { cerrarTodo(); aviso('Identifícate antes de pagar'); return abrir('#modal-login'); }
+  const boton = $('#btn-pagar'); boton.disabled = true;
+  try {
+    const p = await llamarApi('/api/pedidos', { usuario: sesion.nombre, edicion: sesion.edicion, items: itemsPedido(), cupon: cuponAplicado });
+    location.href = p.url;
+  } catch (e) { aviso(esc(e.message)); } finally { boton.disabled = false; }
+});
 $('#lineas').addEventListener('click', e => {
   const mas = e.target.dataset.mas, menos = e.target.dataset.menos;
   if (mas != null) carrito[mas].cant++;
@@ -748,5 +777,6 @@ addEventListener('hashchange', render);
 
 /* arranque */
 pintar(); pintarSesion(); pintarCarrito();
-fetch('data/catalogo.json').then(r => r.json()).then(d => { CATALOGO = d; render(); })
+(API ? fetch(API + '/api/catalogo').then(r => { if (!r.ok) throw new Error(r.status); return r.json(); }).catch(() => fetch('data/catalogo.json').then(r => r.json())) : fetch('data/catalogo.json').then(r => r.json()))
+  .then(d => { CATALOGO = d; render(); })
   .catch(() => { $('#vista').innerHTML = '<p class="vacio">No se pudo cargar el catálogo.</p>'; });

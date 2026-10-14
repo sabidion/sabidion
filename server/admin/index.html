@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Panel MeeTion</title>
+<style>
+:root{--bg:#14110f;--panel:#1e1815;--linea:#3a2e26;--texto:#f3ebe3;--suave:#a89888;--acento:#fb7406;--ok:#8fd694;--mal:#ff7a6b;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--texto);font:15px/1.45 system-ui,sans-serif}
+button,input,select,textarea{font:inherit;color:inherit}
+html{overflow-x:hidden}
+header.top{display:flex;gap:16px;align-items:center;flex-wrap:wrap;padding:12px 16px;border-bottom:1px solid var(--linea);background:var(--panel)}
+header.top h1{font-size:1rem;margin:0;letter-spacing:.04em;text-transform:uppercase;color:var(--acento)}
+nav{display:flex;gap:4px;flex:1;flex-wrap:wrap}
+nav button{background:none;border:0;padding:8px 12px;cursor:pointer;color:var(--suave);border-bottom:2px solid transparent}
+nav button[aria-selected=true]{color:var(--texto);border-color:var(--acento)}
+main{padding:16px;max-width:1300px;margin:0 auto}
+button.b{background:var(--acento);color:#14110f;border:0;padding:8px 14px;font-weight:700;cursor:pointer}
+button.s{background:none;border:1px solid var(--linea);padding:6px 10px;cursor:pointer}
+button.p{color:var(--mal)}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--acento);outline-offset:1px}
+input,select,textarea{background:#14110f;border:1px solid var(--linea);padding:7px 9px;width:100%}
+label{display:grid;gap:4px;font-size:.82rem;color:var(--suave)}
+.cols{display:grid;grid-template-columns:230px 250px minmax(0,1fr);gap:16px;align-items:start}
+.cols>*{min-width:0}
+@media(max-width:900px){.cols{grid-template-columns:minmax(0,1fr)}.lista{max-height:30vh}}
+.caja{background:var(--panel);border:1px solid var(--linea)}
+.caja h2{font-size:.8rem;text-transform:uppercase;letter-spacing:.08em;color:var(--suave);margin:0;padding:10px 12px;border-bottom:1px solid var(--linea);display:flex;justify-content:space-between;align-items:center;gap:8px}
+.lista{list-style:none;margin:0;padding:0;max-height:70vh;overflow:auto}
+.lista li button.fila{display:flex;width:100%;justify-content:space-between;gap:8px;text-align:left;background:none;border:0;border-bottom:1px solid var(--linea);padding:9px 12px;cursor:pointer}
+.lista li button.fila[aria-current=true]{background:#2c221c;box-shadow:inset 3px 0 var(--acento)}
+.lista small{color:var(--suave)}
+.tabla{overflow-x:auto}table{border-collapse:collapse;width:100%}
+th,td{padding:8px 10px;border-bottom:1px solid var(--linea);text-align:left;vertical-align:middle;white-space:nowrap}
+th{font-size:.75rem;text-transform:uppercase;letter-spacing:.06em;color:var(--suave)}
+td.n{font-variant-numeric:tabular-nums;text-align:right}td.nombre{white-space:normal;min-width:180px}
+.pill{display:inline-block;padding:1px 8px;font-size:.75rem;border:1px solid var(--linea)}
+.pill.ok{color:var(--ok);border-color:var(--ok)}.pill.mal{color:var(--mal);border-color:var(--mal)}.pill.pen{color:var(--acento);border-color:var(--acento)}
+dialog{background:var(--panel);color:var(--texto);border:1px solid var(--linea);padding:20px;width:min(560px,calc(100vw - 32px));max-height:90vh;overflow:auto}
+dialog::backdrop{background:#000a}
+form.grid{display:grid;gap:12px}form.grid .fila2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.acciones{display:flex;gap:8px;justify-content:flex-end;margin-top:4px}
+.vacio{padding:24px 12px;color:var(--suave);text-align:center}
+#aviso{position:fixed;left:50%;bottom:16px;transform:translateX(-50%);background:var(--panel);border:1px solid var(--linea);padding:10px 16px;max-width:calc(100vw - 32px)}
+#aviso.mal{border-color:var(--mal);color:var(--mal)}
+#login{max-width:340px;margin:12vh auto;padding:24px;background:var(--panel);border:1px solid var(--linea);display:grid;gap:14px}
+#login h1{margin:0;font-size:1.1rem;color:var(--acento)}
+.barra{display:flex;gap:8px;margin-bottom:12px;align-items:center;flex-wrap:wrap}.barra .espacio{flex:1}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div id="aviso" role="status" hidden></div>
+<script src="/admin/admin.js"></script>
+</body>
+</html>

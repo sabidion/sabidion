@@ -1,0 +1,18 @@
+[Unit]
+Description=Tienda de MeeTion Network (API)
+After=network.target
+
+[Service]
+Type=simple
+User=meetion
+WorkingDirectory=/opt/sabidion/server
+ExecStart=/usr/bin/node --env-file=/opt/sabidion/server/.env src/server.js
+Restart=on-failure
+RestartSec=3
+NoNewPrivileges=true
+ProtectSystem=strict
+ReadWritePaths=/opt/sabidion/server/data
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
