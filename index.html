@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+<meta name="googlebot" content="noindex, nofollow">
+<meta name="description" content="Maqueta de la web de MeeTion Network: 8 modalidades, tienda con todo el catálogo, eventos, wiki de rangos y votos.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="MeeTion Network">
+<meta property="og:title" content="La nueva web de MeeTion Network (maqueta)">
+<meta property="og:description" content="8 modalidades, tienda con +1.100 productos, eventos, wiki de rangos, votos y jugadores en vivo.">
+<meta property="og:image" content="https://maikell95.github.io/mockups/meetionmc/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="https://maikell95.github.io/mockups/meetionmc/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#fb7406">
+<title>MeeTion Network · Servidor de Minecraft</title>
+<link rel="icon" href="icono.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="estilos.css?v=18">
+</head>
+<body>
+
+<div class="lava"></div>
+<div class="nether" aria-hidden="true"><svg class="monte lejos" data-k="0.03"></svg><canvas class="lago"></canvas><div class="brillo-lava"></div><svg class="monte media" data-k="0.07"></svg><canvas class="monte blazes" data-k="0.07"></canvas><svg class="monte fortaleza" data-k="0.07"></svg><svg class="monte cerca" data-k="0.12"></svg></div>
+<canvas id="brasas"></canvas>
+<div class="calor" aria-hidden="true"></div>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><filter id="filtro-calor" x="-10%" y="-10%" width="120%" height="120%">
+  <feTurbulence type="fractalNoise" baseFrequency="0.06 0.12" numOctaves="2" seed="4" result="ruido"><animate attributeName="baseFrequency" dur="2.4s" values="0.06 0.12;0.08 0.16;0.06 0.12" repeatCount="indefinite"/></feTurbulence>
+  <feDisplacementMap in="SourceGraphic" in2="ruido" scale="6" xChannelSelector="R" yChannelSelector="G"/></filter></svg>
+
+<div class="demo-bar">Maqueta de demostración para MeeTion Network · Diseñada por Maikel Ferrer → <a href="https://maikell95.github.io/Portfolio/" target="_blank" rel="noopener">Ver portafolio</a></div>
+
+<nav>
+  <div class="wrap">
+    <a class="brand pixel" href="#inicio"><img src="icono.png" alt=""><span>MeeTion</span></a>
+    <div class="links" id="links">
+      <a href="#inicio" data-ruta="inicio">Inicio</a>
+      <a href="#modalidades" data-ruta="modalidades">Modalidades</a>
+      <a href="#tienda" data-ruta="tienda">Tienda</a>
+      <a href="#eventos" data-ruta="eventos">Eventos</a>
+      <a href="#votar" data-ruta="votar">Votar</a>
+      <a href="#wiki" data-ruta="wiki">Wiki</a>
+      <a href="#comunidad" data-ruta="comunidad">Comunidad</a>
+    </div>
+    <div class="acciones">
+      <button class="usuario" id="btn-usuario"><img id="avatar" src="https://mc-heads.net/avatar/MHF_Steve/32" alt=""><span id="nombre-usuario">Identifícate</span></button>
+      <button class="btn sm carrito-btn" id="btn-carrito">Carrito <span class="num" id="num-carrito">0</span></button>
+      <button class="btn sm ghost menu-movil" id="btn-menu" aria-label="Menú">☰</button>
+    </div>
+  </div>
+</nav>
+
+<div class="evento"><svg data-pixel="calabaza"></svg> <span><b>Evento Halloween 2026</b> · termina en <span class="cuenta" id="cuenta">—</span> · <a href="#eventos">ver evento</a></span> <svg data-pixel="fantasma"></svg></div>
+
+<main id="vista"></main>
+
+<footer class="pie">
+  <div class="wrap">
+    <div>
+      <span class="pixel">MeeTion Network</span>
+      <p style="margin-top:6px;font-size:0.8rem">Maqueta de demostración, no es la web oficial. Catálogo, precios y ventajas de rango tomados de la tienda pública; lo marcado como <span class="ejemplo">ejemplo</span> es contenido de muestra; jugadores anonimizados. Diseñada y programada por Maikel Ferrer.</p>
+    </div>
+    <span>No afiliado a Mojang ni Microsoft.</span>
+  </div>
+</footer>
+
+
+<!-- carrito -->
+<div class="capa" id="capa"></div>
+<aside class="cajon" id="cajon" aria-label="Carrito">
+  <header>Tu carrito <button class="cerrar" data-cerrar>✕</button></header>
+  <div class="lineas" id="lineas"></div>
+  <footer>
+    <div class="total">Total <b id="total">0.00 USD</b></div>
+    <button class="btn gold full" id="btn-pagar">Pagar</button>
+  </footer>
+</aside>
+
+<!-- modal de producto -->
+<div class="modal" id="modal-producto" role="dialog" aria-modal="true">
+  <button class="cerrar" data-cerrar>✕</button>
+  <div id="contenido-producto"></div>
+</div>
+
+<!-- modal de identificación -->
+<div class="modal" id="modal-login" role="dialog" aria-modal="true">
+  <button class="cerrar" data-cerrar>✕</button>
+  <h3>Identifícate</h3>
+  <p class="muted">Escribe tu nombre de Minecraft para que la compra llegue a tu cuenta.</p>
+  <div class="campo"><label class="pixel" style="font-size:0.72rem">Edición</label>
+    <div class="edicion"><button data-edicion="java" class="on">Java</button><button data-edicion="bedrock">Bedrock</button></div>
+  </div>
+  <div class="campo"><label class="pixel" style="font-size:0.72rem" for="input-usuario">Usuario</label>
+    <input id="input-usuario" maxlength="16" placeholder="Tu usuario" autocomplete="off">
+  </div>
+  <div class="vista-previa"><img id="previa" src="https://mc-heads.net/avatar/MHF_Steve/48" alt=""><span id="previa-txt" class="muted">Así aparecerás en la tienda</span></div>
+  <button class="btn gold full" id="btn-entrar" style="margin-top:16px">Entrar</button>
+</div>
+
+<!-- modal de pago -->
+<div class="modal" id="modal-pago" role="dialog" aria-modal="true">
+  <button class="cerrar" data-cerrar>✕</button>
+  <h3>Así sería el pago</h3>
+  <p class="muted">En la versión real, el jugador elige cómo pagar y recibe lo comprado en el juego al momento, sin pasar por la comisión de una tienda genérica.</p>
+  <div class="pago"><div>PayPal</div><div>Tarjeta</div><div>Cripto</div></div>
+  <ol style="color:var(--muted);padding-left:20px">
+    <li>Se verifica tu usuario.</li>
+    <li>Se cobra y se valida el precio en el servidor.</li>
+    <li>El juego ejecuta la entrega en la modalidad que toque.</li>
+  </ol>
+  <button class="btn full" data-cerrar style="margin-top:16px">Entendido</button>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="app.js?v=25"></script>
+</body>
+</html>
